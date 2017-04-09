@@ -1,4 +1,16 @@
 {
+
+	"name": "flsouto/fstore",
+	"description": "Library for storing relational data in the file system",
+	"type": "library",
+	"authors": [
+	    {
+	        "name": "Fabio Souto",
+	        "email": "fabiolimasouto@gmail.com"
+	    }
+	],
+  "minimum-stability": "dev",
+  "keywords"  : ["database","nosql"],
   "autoload" : {
     "psr-0" : {
       "FlSouto\\" : "."
