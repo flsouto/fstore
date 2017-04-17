@@ -30,7 +30,7 @@ class FstoreTable{
     }
 
     function insert(array $data){
-        $id = microtime(true) * 10000;
+        $id = (microtime(true)*10000)."";
         if(!is_dir($this->dir())){
             mkdir($this->dir());
         }
