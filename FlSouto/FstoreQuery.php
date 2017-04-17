@@ -45,7 +45,7 @@ class FstoreQuery{
             }
             if($pass){
                 $rows[$id] = $row;
-                if(count($rows)>=$limit){
+                if($limit && count($rows)>=$limit){
                     break;
                 }
             }
