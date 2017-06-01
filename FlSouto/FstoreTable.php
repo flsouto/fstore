@@ -30,7 +30,8 @@ class FstoreTable{
     }
 
     function insert(array $data){
-        $id = (microtime(true)*10000)."";
+        static $called_times = 0;
+        $id = ((microtime(true)*10000)+$called_times)."";
         if(!is_dir($this->dir())){
             mkdir($this->dir());
         }
@@ -38,6 +39,7 @@ class FstoreTable{
         if(isset(self::$cache_ids[$this->table])){
             self::$cache_ids[$this->table][] = $id;
         }
+        $called_times++;
         return $id;
     }
 
