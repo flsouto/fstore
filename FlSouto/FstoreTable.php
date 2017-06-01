@@ -99,5 +99,9 @@ class FstoreTable{
         }
 
     }
+    
+    function date($format, $id){
+        return date($format, $id/10000);
+    }
 
 }

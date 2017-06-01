@@ -33,4 +33,8 @@ class Fstore{
         return $this->tables[$table];
     }
 
+    function date($format, $id){
+        return date($format, $id/10000);
+    }
+
 }
