@@ -1,6 +1,29 @@
+<?php
+
+require 'vendor/autoload.php';
+use FlSouto\Fstore;
+
+class FstoreTest extends PHPUnit\Framework\TestCase{
+
+    function testCreateDatabase(){
+        $db = new Fstore(__DIR__.'/test_db');
+        $this->assertEquals(__DIR__.'/test_db', $db->dir());
+    }
+
+    function testExceptionInvalidDir(){
+        $this->expectException(\Exception::class);
+        new Fstore('sdfdsf');
+    }
+
+    function testExceptionNonWritableDir(){
+        $this->expectException(\Exception::class);
+        new Fstore(__DIR__.'/protected_dir');
+    }
+
+}
+
+
 // Fstore //////////////
-// create database
-// get save dir
 // get a table
 
 // Table /////////
