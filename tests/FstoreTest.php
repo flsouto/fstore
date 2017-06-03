@@ -2,6 +2,7 @@
 
 require 'vendor/autoload.php';
 use FlSouto\Fstore;
+use FlSouto\FstoreTable;
 
 class FstoreTest extends PHPUnit\Framework\TestCase{
 
@@ -19,12 +20,14 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         $this->expectException(\Exception::class);
         new Fstore(__DIR__.'/protected_dir');
     }
+    
+    function testGetTable(){
+        $db = new Fstore(__DIR__.'/test_db');
+        $users = $db->table('users');
+        $this->assertInstanceOf(FstoreTable::class, $users);
+    }
 
 }
-
-
-// Fstore //////////////
-// get a table
 
 // Table /////////
 // insert
