@@ -23,20 +23,40 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
     
     function testGetTable(){
         $db = new Fstore(__DIR__.'/test_db');
-        $users = $db->table('users');
-        $this->assertInstanceOf(FstoreTable::class, $users);
+        // creates users table on the fly
+        $products = $db->table('products');
+        $this->assertInstanceOf(FstoreTable::class, $products);
     }
+
+    function testInsertAndGet(){
+        $db = new Fstore(__DIR__.'/test_db');
+        $products = $db->table('products');
+        $id = $products->insert([
+            'name' => 'Pencil',
+            'description' => 'Can be used to write things down.',
+            'price' => 1.99
+        ]);
+
+        $new_row = $products->get($id);
+
+        $this->assertEquals([
+            'name' => 'Pencil',
+            'description' => 'Can be used to write things down.',
+            'price' => 1.99
+        ],$new_row);
+    }
+
+
 
 }
 
 // Table /////////
-// insert
+// get date based on id
 // update
 // delete
 // get all ids
 // get first 10 ids
 // get 10 last ids
-// get row by id
 
 // Query ///////
 // fetch rows matching criteria (filter)
