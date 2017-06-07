@@ -46,6 +46,18 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         ],$new_row);
     }
 
+    function testGetDateBasedOnId(){
+        $db = new Fstore(__DIR__.'/test_db');
+        $products = $db->table('products');
+        $id = $products->insert([
+            'name' => 'Pencil',
+            'description' => 'Can be used to write things down.',
+            'price' => 1.99
+        ]);
+        
+        $date = $products->date('d/m/Y H:i', $id);
+        $this->assertEquals($date, date('d/m/Y H:i'));
+    }
 
 
 }
