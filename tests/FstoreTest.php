@@ -59,12 +59,29 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         $this->assertEquals($date, date('d/m/Y H:i'));
     }
 
+    function testUpdate(){
+
+        $db = new Fstore(__DIR__.'/test_db');
+        $products = $db->table('products');
+
+        $id = $products->insert([
+            'name' => 'Pencil',
+            'description' => 'Can be used to write things down.',
+            'price' => 1.99
+        ]);
+
+        $products->update(['price'=>1.5], $id);
+
+        $row = $products->get($id);
+
+        $this->assertEquals(1.5, $row['price']);
+
+    }
+
 
 }
 
 // Table /////////
-// get date based on id
-// update
 // delete
 // get all ids
 // get first 10 ids
