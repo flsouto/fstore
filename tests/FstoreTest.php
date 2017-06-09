@@ -78,6 +78,25 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
 
     }
 
+    function testDelete(){
+
+        $db = new Fstore(__DIR__.'/test_db');
+        $products = $db->table('products');
+
+        $id = $products->insert([
+            'name' => 'Pencil',
+            'description' => 'Can be used to write things down.',
+            'price' => 1.99
+        ]);
+
+        $products->delete($id);
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $products->get($id);
+
+    }
+
 
 }
 
