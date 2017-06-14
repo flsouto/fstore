@@ -99,26 +99,48 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
 
     function testGetAllIds(){
 
-        $tmp_tbl = uniqid();
         $db = new Fstore(__DIR__.'/test_db');
+        $tmp_tbl = uniqid();
         $table = $db->table($tmp_tbl);
 
-        $ids = [];
+        $inserted_ids = [];
         foreach(['a','b','c','d'] as $letter){
-            $ids []= $table->insert([
+            $inserted_ids []= $table->insert([
                 'letter' => $letter
             ]);
         }
 
-        $this->assertEquals($ids, $table->ids());
+        $ids = $table->ids();
+
+        $this->assertEquals($ids, $inserted_ids);
 
     }
+
+    function testGetFirstXIds(){
+
+        $db = new Fstore(__DIR__.'/test_db');
+        $tmp_tbl = uniqid();
+        $table = $db->table($tmp_tbl);
+
+        $inserted_ids = [];
+        foreach(range('a','z') as $letter){
+            $inserted_ids []= $table->insert([
+                'letter' => $letter
+            ]);
+        }
+
+        $first_10_ids = $table->ids(10);
+
+        $this->assertEquals(array_slice($inserted_ids,0,10), $first_10_ids);
+
+    }
+
+
 
 
 }
 
 // Table /////////
-// get all ids
 // get first 10 ids
 // get 10 last ids
 
