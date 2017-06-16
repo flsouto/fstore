@@ -135,14 +135,26 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
 
     }
 
+    function testGetLastXIds(){
 
+        $db = new Fstore(__DIR__.'/test_db');
+        $tmp_tbl = uniqid();
+        $table = $db->table($tmp_tbl);
 
+        $inserted_ids = [];
+        foreach(range('a','z') as $letter){
+            $inserted_ids []= $table->insert([
+                'letter' => $letter
+            ]);
+        }
+
+        $last_10_ids = $table->ids(-10);
+
+        $this->assertEquals(array_slice(array_reverse($inserted_ids),0,10), $last_10_ids);
+
+    }
 
 }
-
-// Table /////////
-// get first 10 ids
-// get 10 last ids
 
 // Query ///////
 // fetch rows matching criteria (filter)
