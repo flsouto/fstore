@@ -153,6 +153,32 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         $this->assertEquals(array_slice(array_reverse($inserted_ids),0,10), $last_10_ids);
 
     }
+    
+    function testFetchRowsWithFilter(){
+
+        $db = new Fstore(__DIR__.'/test_db');
+        $tmp_tbl = uniqid();
+        $table = $db->table($tmp_tbl);
+
+        $inserted_ids = [];
+        foreach(range('a','z') as $letter){
+            $inserted_ids []= $table->insert([
+                'letter' => $letter
+            ]);
+        }
+        
+        $q = $table->query();
+        
+        // only rows that satisfy certain conditions
+        $q->filter(function($row){
+            return in_array($row['letter'], ['f','a','b','i','o']);
+        });
+        // fetch those rows
+        $rows = $q->rows();
+        
+        $this->assertEquals(array_column($rows,'letter'),['a','b','f','i','o']);
+        
+    }
 
 }
 
