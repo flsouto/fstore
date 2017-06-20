@@ -180,10 +180,37 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         
     }
 
+    function testLastXRows(){
+
+        $db = new Fstore(__DIR__.'/test_db');
+        $tmp_tbl = uniqid();
+        $table = $db->table($tmp_tbl);
+
+        $inserted_ids = [];
+        foreach(range('a','z') as $letter){
+            $inserted_ids []= $table->insert([
+                'letter' => $letter
+            ]);
+        }
+
+        $q = $table->query();
+
+        // the last ten
+        $q->limit(-10);
+
+        // fetch them
+        $rows = $q->rows();
+
+        $this->assertEquals(
+            array_reverse(['q','r','s','t','u','v','w', 'x', 'y', 'z']),
+            array_slice(array_column($rows,'letter'),-10)
+        );
+
+    }
+
 }
 
 // Query ///////
-// fetch rows matching criteria (filter)
 // limit result (all, last, first)
 // fetch values of a single column
 // fetch only the ids matching the criteria
