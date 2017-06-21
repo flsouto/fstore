@@ -208,9 +208,44 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
 
     }
 
+    function testFetchValues(){
+
+        $db = new Fstore(__DIR__.'/test_db');
+        $tmp_tbl = uniqid();
+        $table = $db->table($tmp_tbl);
+
+        foreach(range('a','z') as $letter){
+            $table->insert([
+                'letter' => $letter
+            ]);
+        }
+
+        $q = $table->query();
+
+        // first ten
+        $q->limit(10);
+
+        // fetch values of 'letter' column
+        $values = $q->values('letter');
+
+        $this->assertEquals(
+            range('a','j'),
+            array_values($values)
+        );
+    }
+
+    function __destruct(){
+
+        foreach(scandir($path=__DIR__.'/test_db/') as $dir){
+            if(is_dir($path.$dir) && $dir!='.'&&$dir!='..'){
+                shell_exec("rm {$path}{$dir} -R");
+            }
+        }
+
+    }
+
 }
 
 // Query ///////
-// limit result (all, last, first)
 // fetch values of a single column
 // fetch only the ids matching the criteria
