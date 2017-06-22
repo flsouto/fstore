@@ -234,10 +234,46 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         );
     }
 
+    function testFetchIds(){
+
+        $db = new Fstore(__DIR__.'/test_db');
+        $tmp_tbl = uniqid();
+        $table = $db->table($tmp_tbl);
+
+        $insert_ids = [];
+        foreach(range('a','z') as $letter){
+            $insert_ids[$letter] = $table->insert([
+                'letter' => $letter
+            ]);
+        }
+
+        $q = $table->query();
+
+        // only rows that satisfy certain conditions
+        $q->filter(function($row){
+            return in_array($row['letter'], ['f','a','b','i','o']);
+        });
+
+        // fetch only the ids
+        $ids = $q->ids();
+
+        $expected = [];
+        foreach(str_split('fabio') as $letter){
+            $expected[] = $insert_ids[$letter];
+        }
+        sort($ids);
+        sort($expected);
+
+        $this->assertEquals(
+            $expected,
+            $ids
+        );
+    }
+
     function __destruct(){
 
         foreach(scandir($path=__DIR__.'/test_db/') as $dir){
-            if(is_dir($path.$dir) && $dir!='.'&&$dir!='..'){
+            if(is_dir($path.$dir) && $dir!='.' && $dir!='..'){
                 shell_exec("rm {$path}{$dir} -R");
             }
         }
@@ -245,7 +281,3 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
     }
 
 }
-
-// Query ///////
-// fetch values of a single column
-// fetch only the ids matching the criteria
