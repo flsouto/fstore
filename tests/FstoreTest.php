@@ -6,6 +6,11 @@ use FlSouto\FstoreTable;
 
 class FstoreTest extends PHPUnit\Framework\TestCase{
 
+/* 
+### Accessing a Database
+
+
+*/
     function testCreateDatabase(){
         $db = new Fstore(__DIR__.'/test_db');
         $this->assertEquals(__DIR__.'/test_db', $db->dir());
@@ -20,7 +25,11 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         $this->expectException(\Exception::class);
         new Fstore(__DIR__.'/protected_dir');
     }
-    
+
+/* 
+### Accessing a Table
+
+*/    
     function testGetTable(){
         $db = new Fstore(__DIR__.'/test_db');
         // creates users table on the fly
@@ -28,6 +37,10 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         $this->assertInstanceOf(FstoreTable::class, $products);
     }
 
+/* 
+### Inserting and Retrieving a Row
+*/    
+    
     function testInsertAndGet(){
         $db = new Fstore(__DIR__.'/test_db');
         $products = $db->table('products');
@@ -46,6 +59,10 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         ],$new_row);
     }
 
+/* 
+### Getting the Insert Date Based on the Row's ID
+
+*/    
     function testGetDateBasedOnId(){
         $db = new Fstore(__DIR__.'/test_db');
         $products = $db->table('products');
@@ -59,6 +76,9 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         $this->assertEquals($date, date('d/m/Y H:i'));
     }
 
+/* 
+### Updating a Record
+*/    
     function testUpdate(){
 
         $db = new Fstore(__DIR__.'/test_db');
@@ -78,6 +98,10 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
 
     }
 
+/*
+### Deleting a Record
+
+*/    
     function testDelete(){
 
         $db = new Fstore(__DIR__.'/test_db');
@@ -96,7 +120,9 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         $products->get($id);
 
     }
-
+/* 
+### Retrieving all IDs from a Table
+*/
     function testGetAllIds(){
 
         $db = new Fstore(__DIR__.'/test_db');
@@ -115,7 +141,9 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         $this->assertEquals($ids, $inserted_ids);
 
     }
-
+/* 
+### Retrieving only first 10 IDs from a Table
+*/
     function testGetFirstXIds(){
 
         $db = new Fstore(__DIR__.'/test_db');
@@ -135,6 +163,9 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
 
     }
 
+/* 
+### Retrieving only the LAST 10 IDs from a Table
+*/    
     function testGetLastXIds(){
 
         $db = new Fstore(__DIR__.'/test_db');
@@ -153,7 +184,11 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         $this->assertEquals(array_slice(array_reverse($inserted_ids),0,10), $last_10_ids);
 
     }
-    
+
+/* 
+### Querying a Table using Filters
+
+*/    
     function testFetchRowsWithFilter(){
 
         $db = new Fstore(__DIR__.'/test_db');
@@ -180,6 +215,10 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         
     }
 
+/* 
+### Querying The Last X Rows...
+*/    
+    
     function testLastXRows(){
 
         $db = new Fstore(__DIR__.'/test_db');
@@ -208,6 +247,10 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
 
     }
 
+/*
+### Fetching only one column from the result
+
+*/
     function testFetchValues(){
 
         $db = new Fstore(__DIR__.'/test_db');
@@ -234,6 +277,10 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
         );
     }
 
+/*
+### Fetching only the ids from a result
+
+*/
     function testFetchIds(){
 
         $db = new Fstore(__DIR__.'/test_db');
