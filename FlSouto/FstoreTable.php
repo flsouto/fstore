@@ -52,7 +52,12 @@ class FstoreTable{
     }
 
     function delete($id){
-        unlink($this->dir().$id.'.json');
+        if(file_exists($this->dir().$id.'.json')){
+            unlink($this->dir().$id.'.json');
+        }
+        if(isset(self::$cache_ids[$this->table]) && ($i=array_search($id,self::$cache_ids[$this->table]))!==false){
+            unset(self::$cache_ids[$this->table][$i]);
+        }
     }
 
     function get($id){
