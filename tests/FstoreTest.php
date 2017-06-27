@@ -126,8 +126,7 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
     function testGetAllIds(){
 
         $db = new Fstore(__DIR__.'/test_db');
-        $tmp_tbl = uniqid();
-        $table = $db->table($tmp_tbl);
+        $table = $db->table('alphabet');
 
         $inserted_ids = [];
         foreach(['a','b','c','d'] as $letter){
@@ -147,8 +146,7 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
     function testGetFirstXIds(){
 
         $db = new Fstore(__DIR__.'/test_db');
-        $tmp_tbl = uniqid();
-        $table = $db->table($tmp_tbl);
+        $table = $db->table('alphabet');
 
         $inserted_ids = [];
         foreach(range('a','z') as $letter){
@@ -169,8 +167,7 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
     function testGetLastXIds(){
 
         $db = new Fstore(__DIR__.'/test_db');
-        $tmp_tbl = uniqid();
-        $table = $db->table($tmp_tbl);
+        $table = $db->table('alphabet');
 
         $inserted_ids = [];
         foreach(range('a','z') as $letter){
@@ -192,8 +189,7 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
     function testFetchRowsWithFilter(){
 
         $db = new Fstore(__DIR__.'/test_db');
-        $tmp_tbl = uniqid();
-        $table = $db->table($tmp_tbl);
+        $table = $db->table('alphabet');
 
         $inserted_ids = [];
         foreach(range('a','z') as $letter){
@@ -201,7 +197,7 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
                 'letter' => $letter
             ]);
         }
-        
+
         $q = $table->query();
         
         // only rows that satisfy certain conditions
@@ -222,8 +218,7 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
     function testLastXRows(){
 
         $db = new Fstore(__DIR__.'/test_db');
-        $tmp_tbl = uniqid();
-        $table = $db->table($tmp_tbl);
+        $table = $db->table('alphabet');
 
         $inserted_ids = [];
         foreach(range('a','z') as $letter){
@@ -254,8 +249,7 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
     function testFetchValues(){
 
         $db = new Fstore(__DIR__.'/test_db');
-        $tmp_tbl = uniqid();
-        $table = $db->table($tmp_tbl);
+        $table = $db->table('alphabet');
 
         foreach(range('a','z') as $letter){
             $table->insert([
@@ -284,8 +278,7 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
     function testFetchIds(){
 
         $db = new Fstore(__DIR__.'/test_db');
-        $tmp_tbl = uniqid();
-        $table = $db->table($tmp_tbl);
+        $table = $db->table('alphabet');
 
         $insert_ids = [];
         foreach(range('a','z') as $letter){
@@ -315,6 +308,17 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
             $expected,
             $ids
         );
+    }
+
+    function tearDown(){
+        $db = new Fstore(__DIR__.'/test_db');
+        $table = $db->table('alphabet');
+        if(is_dir($table->dir())){
+            foreach($table->ids() as $id){
+                $table->delete($id);
+            }
+        }
+
     }
 
     function __destruct(){
