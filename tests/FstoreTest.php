@@ -9,6 +9,9 @@ class FstoreTest extends PHPUnit\Framework\TestCase{
 /* 
 ### Accessing a Database
 
+A database is nothing more than a directory. So all you have to do is specify the path to that
+directory when creating a database instance. If the directory does not exist, it will be created
+when the first row is inserted.
 
 */
     function testCreateDatabase(){
