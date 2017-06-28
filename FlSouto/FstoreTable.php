@@ -33,7 +33,7 @@ class FstoreTable{
         static $called_times = 0;
         $id = ((microtime(true)*10000)+$called_times)."";
         if(!is_dir($this->dir())){
-            mkdir($this->dir());
+            mkdir($this->dir(), 0777, true);
         }
         $this->put($id, $data);
         if(isset(self::$cache_ids[$this->table])){
