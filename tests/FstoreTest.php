@@ -32,6 +32,9 @@ when the first row is inserted.
 /* 
 ### Accessing a Table
 
+You can get a table instance from a database by calling the table method. If the table does not exist, it will be
+created once the first row is inserted.
+
 */    
     function testGetTable(){
         $db = new Fstore(__DIR__.'/test_db');
