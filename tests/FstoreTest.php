@@ -32,7 +32,7 @@ when the first row is inserted.
 /* 
 ### Accessing a Table
 
-You can get a table instance from a database by calling the table method. If the table does not exist, it will be
+You can get a table instance from a database by calling the `table` method. If the table does not exist, it will be
 created once the first row is inserted.
 
 */    
@@ -45,6 +45,10 @@ created once the first row is inserted.
 
 /* 
 ### Inserting and Retrieving a Row
+
+The table object provides an `insert` method which accepts an associative array and returns the automatically generated
+row id:
+
 */    
     
     function testInsertAndGet(){
