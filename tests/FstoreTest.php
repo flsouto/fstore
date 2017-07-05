@@ -72,6 +72,11 @@ row id:
 /* 
 ### Getting the Insert Date Based on the Row's ID
 
+The `insert` method of a table object generates an id which contains the timestamp itself so there is no need to create a "date_added" column.
+But, in order to avoid conflicts when inserting multiple rows on the same table at the same time the generated id has the miliseconds as well as a counter
+which guarantees that the ids will always be different, even if inserted on the same nanosecond! So, in order to take the corrrect date/time from this hash you have to remove those extra numbers.
+The good news is that there is a `$table->date` method which does just that for you:
+
 */    
     function testGetDateBasedOnId(){
         $db = new Fstore(__DIR__.'/test_db');
