@@ -93,6 +93,9 @@ The good news is that there is a `$table->date` method which does just that for 
 
 /* 
 ### Updating a Record
+Updating a table record is pretty straightforward: just call `update` and pass it an associative array followed by
+the row id:
+
 */    
     function testUpdate(){
 
