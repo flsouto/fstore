@@ -118,6 +118,7 @@ the row id:
 
 /*
 ### Deleting a Record
+To delete a record simply call `$table->delete($id)`, see example:
 
 */    
     function testDelete(){
