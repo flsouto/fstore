@@ -141,15 +141,18 @@ To delete a record simply call `$table->delete($id)`, see example:
     }
 /* 
 ### Retrieving all IDs from a Table
+Use `$table->ids()` to get all ids:
+
 */
     function testGetAllIds(){
 
         $db = new Fstore(__DIR__.'/test_db');
         $table = $db->table('alphabet');
 
-        $inserted_ids = [];
+        $inserted_ids = []; #mdx:skip
         foreach(['a','b','c','d'] as $letter){
-            $inserted_ids []= $table->insert([
+            $inserted_ids []= #mdx:skip
+            $table->insert([
                 'letter' => $letter
             ]);
         }
