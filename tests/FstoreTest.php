@@ -164,6 +164,7 @@ Use `$table->ids()` to get all ids:
     }
 /* 
 ### Retrieving only first 10 IDs from a Table
+Use `$table->ids(X)` to get the first X ids:
 */
     function testGetFirstXIds(){
 
@@ -185,7 +186,9 @@ Use `$table->ids()` to get all ids:
 
 /* 
 ### Retrieving only the LAST 10 IDs from a Table
-*/    
+Use `$table->ids(-X)` to get the last X ids:
+
+*/
     function testGetLastXIds(){
 
         $db = new Fstore(__DIR__.'/test_db');
