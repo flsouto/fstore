@@ -209,6 +209,9 @@ Use `$table->ids(-X)` to get the last X ids:
 
 /* 
 ### Querying a Table using Filters
+The table object provides a query builder which can be created via `$table->query()`. 
+This query builder allows us to filter results by means of a `$query->filter()` function
+which accepts a callback. The following example illustrates this better:
 
 */    
     function testFetchRowsWithFilter(){
