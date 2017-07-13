@@ -241,6 +241,7 @@ which accepts a callback. The following example illustrates this better:
 
 /* 
 ### Querying The Last X Rows...
+Call the `limit` method on a query object and pass it a negative number. See example:
 */    
     
     function testLastXRows(){
@@ -272,7 +273,8 @@ which accepts a callback. The following example illustrates this better:
 
 /*
 ### Fetching only one column from the result
-
+Call the `values` method on a query object passing it the name of the desired column.
+This will return an array of all values of that column. See example:
 */
     function testFetchValues(){
 
