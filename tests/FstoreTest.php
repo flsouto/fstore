@@ -303,6 +303,7 @@ This will return an array of all values of that column. See example:
 
 /*
 ### Fetching only the ids from a result
+Call the `ids` method on a query object:
 
 */
     function testFetchIds(){
