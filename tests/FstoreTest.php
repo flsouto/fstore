@@ -171,9 +171,10 @@ Use `$table->ids(X)` to get the first X ids:
         $db = new Fstore(__DIR__.'/test_db');
         $table = $db->table('alphabet');
 
-        $inserted_ids = [];
+        $inserted_ids = []; #mdx:skip
         foreach(range('a','z') as $letter){
-            $inserted_ids []= $table->insert([
+            $inserted_ids []= #mdx:skip
+            $table->insert([
                 'letter' => $letter
             ]);
         }
@@ -194,9 +195,10 @@ Use `$table->ids(-X)` to get the last X ids:
         $db = new Fstore(__DIR__.'/test_db');
         $table = $db->table('alphabet');
 
-        $inserted_ids = [];
+        $inserted_ids = []; #mdx:skip
         foreach(range('a','z') as $letter){
-            $inserted_ids []= $table->insert([
+            $inserted_ids []= #mdx:skip
+            $table->insert([
                 'letter' => $letter
             ]);
         }
@@ -219,9 +221,10 @@ which accepts a callback. The following example illustrates this better:
         $db = new Fstore(__DIR__.'/test_db');
         $table = $db->table('alphabet');
 
-        $inserted_ids = [];
+        $inserted_ids = [];#mdx:skip
         foreach(range('a','z') as $letter){
-            $inserted_ids []= $table->insert([
+            $inserted_ids []= #mdx:skip
+            $table->insert([
                 'letter' => $letter
             ]);
         }
@@ -249,9 +252,10 @@ Call the `limit` method on a query object and pass it a negative number. See exa
         $db = new Fstore(__DIR__.'/test_db');
         $table = $db->table('alphabet');
 
-        $inserted_ids = [];
+        $inserted_ids = [];#mdx:skip
         foreach(range('a','z') as $letter){
-            $inserted_ids []= $table->insert([
+            $inserted_ids []= #mdx:skip
+            $table->insert([
                 'letter' => $letter
             ]);
         }
@@ -311,9 +315,10 @@ Call the `ids` method on a query object:
         $db = new Fstore(__DIR__.'/test_db');
         $table = $db->table('alphabet');
 
-        $insert_ids = [];
+        $insert_ids = []; #mdx:skip
         foreach(range('a','z') as $letter){
-            $insert_ids[$letter] = $table->insert([
+            $insert_ids[$letter] = #mdx:skip
+            $table->insert([
                 'letter' => $letter
             ]);
         }
