@@ -1,7 +1,11 @@
 <?php
-
+#mdx:h al
 require 'vendor/autoload.php';
+
+#mdx:h use1
 use FlSouto\Fstore;
+
+#mdx:h use2
 use FlSouto\FstoreTable;
 
 class FstoreTest extends PHPUnit\Framework\TestCase{
