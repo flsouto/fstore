@@ -10,7 +10,7 @@ use FlSouto\FstoreTable;
 
 class FstoreTest extends PHPUnit\Framework\TestCase{
 
-/* 
+/*
 ### Accessing a Database
 
 A database is nothing more than a directory. So all you have to do is specify the path to that
@@ -28,16 +28,17 @@ when the first row is inserted.
     }
 
     function testExceptionInvalidDir(){
-        $this->expectException(\Exception::class);
+        $this->expectException(\InvalidArgumentException::class);
         new Fstore('sdfdsf');
     }
 
     function testExceptionNonWritableDir(){
-        $this->expectException(\Exception::class);
+        $this->expectException(\InvalidArgumentException::class);
+        chmod(__DIR__."/protected_dir",0555);
         new Fstore(__DIR__.'/protected_dir');
     }
 
-/* 
+/*
 ### Accessing a Table
 
 You can get a table instance from a database by calling the `table` method. If the table does not exist, it will be
@@ -55,7 +56,7 @@ created once the first row is inserted.
         $this->assertInstanceOf(FstoreTable::class, $products);
     }
 
-/* 
+/*
 ### Inserting and Retrieving a Row
 
 The table object provides an `insert` method which accepts an associative array and returns the automatically generated
@@ -86,7 +87,7 @@ Outputs:
         ],$new_row);
     }
 
-/* 
+/*
 ### Getting the Insert Date Based on the Row's ID
 
 The `insert` method of a table object generates an id which contains the timestamp itself so there is no need to create a "date_added" column.
@@ -109,13 +110,13 @@ Outputs:
             'description' => 'Can be used to write things down.',
             'price' => 1.99
         ]);
-        
+
         $date = $products->date('d/m/Y H:i', $id);
         #/mdx echo $date
         $this->assertEquals($date, date('d/m/Y H:i'));
     }
 
-/* 
+/*
 ### Updating a Record
 Updating a table record is pretty straightforward: just call `update` and pass it an associative array followed by
 the row id:
@@ -172,7 +173,7 @@ To delete a record simply call `$table->delete($id)`, see example:
         $products->get($id);
 
     }
-/* 
+/*
 ### Retrieving all IDs from a Table
 Use `$table->ids()` to get all ids:
 
@@ -201,7 +202,7 @@ Outputs:
         $this->assertEquals($ids, $inserted_ids);
 
     }
-/* 
+/*
 ### Retrieving only first 10 IDs from a Table
 Use `$table->ids(X)` to get the first X ids:
 
@@ -231,7 +232,7 @@ Outputs:
 
     }
 
-/* 
+/*
 ### Retrieving only the LAST 10 IDs from a Table
 Use `$table->ids(-X)` to get the last X ids:
 
@@ -263,9 +264,9 @@ Outputs:
 
     }
 
-/* 
+/*
 ### Querying a Table using Filters
-The table object provides a query builder which can be created via `$table->query()`. 
+The table object provides a query builder which can be created via `$table->query()`.
 This query builder allows us to filter results by means of a `$query->filter()` function
 which accepts a callback. The following example illustrates this better:
 
@@ -290,20 +291,20 @@ Outputs:
         }
 
         $q = $table->query();
-        
+
         // only rows that satisfy certain conditions
         $q->filter(function($row){
             return in_array($row['letter'], ['f','a','b','i','o']);
         });
         // fetch those rows
         $rows = $q->rows();
-        
+
         #/mdx print_r($rows)
         $this->assertEquals(array_column($rows,'letter'),['a','b','f','i','o']);
-        
+
     }
 
-/* 
+/*
 ### Querying The Last X Rows...
 Call the `limit` method on a query object and pass it a negative number. See example:
 
@@ -426,6 +427,93 @@ Outputs:
             $expected,
             $ids
         );
+    }
+/*
+### Selecting the generated ID as a column
+Use the $query->selid($as_key) to include the row id in the result:
+
+#mdx:Selid
+
+Outputs:
+
+#mdx:Selid -o
+*/
+    function testSelid(){
+
+        #mdx:Selid
+        $db = new Fstore(__DIR__.'/test_db');
+        $table = $db->table('users');
+        $table->insert([
+            'name'=>'Alucard',
+            'email'=>'alucard@antichapel.com',
+        ]);
+
+        $rows = $table->query()->selid('_id')->rows();
+        #/mdx print_r($rows)
+        $this->assertArrayHasKey('_id',current($rows));
+        $this->assertEquals(current($rows)['_id'],key($rows));
+    }
+
+/*
+### Filtering by creation date
+Use the `$query->since($date)` and/or `$query->until($date)` to filter by creation date.
+This is faster than filtering by a custom "date" column because it doesn't require the data to be loaded from disk
+(the comparison is based on the generated ids themselves).
+
+#mdx:SinceUntil1 -h:al,use1,use2
+
+It's also possible to combine both:
+
+#mdx:SinceUntil2 -h:al,use1,use2
+
+The `$query->since()` and `$query->until()` methods accept any argument the `strtotime()` php function would accept
+as well as a `DateTime` object or a date in the `d/m/Y` format.
+
+*/
+
+    function testSinceUntil(){
+
+        $db = new Fstore(__DIR__.'/test_db');
+        $table = $db->table('test');
+
+        // Create some rows in the past
+        for($i=1;$i<=30;$i++){
+            $past_time = strtotime("-$i days");
+            $id = $table->insert([
+                'forced_date' => date('Y-m-d H:i:s', $past_time)
+            ]);
+            // lets pretend these rows have been added a few days ago
+            rename($table->dir().$id.'.json', $table->dir().($past_time*10000).'.json');
+        }
+
+        // Selects rows from 10 days ago up until now
+        $result = $table->query()->since('-10 days')->rows();
+
+        $this->assertCount(10, $result);
+
+        #mdx:SinceUntil1
+        // Selects rows from 5 days ago up until now
+        $result = $table->query()->since('-5 days')->rows();
+
+        $this->assertCount(5, $result);#mdx:skip
+
+        // Selects rows from the start up until 5 days ago
+        $result = $table->query()->until('-5 days')->rows();
+        #/mdx
+
+        $dummy = current($result);
+        $this->assertEquals(date('Y-m-d',strtotime('-30 days')),date('Y-m-d',strtotime($dummy['forced_date'])));
+
+        $dummy = end($result);
+        $this->assertEquals(date('Y-m-d',strtotime('-5 days')),date('Y-m-d',strtotime($dummy['forced_date'])));
+
+        #mdx:SinceUntil2
+        // Selects rows from day -5 up until day -2
+        $result = $table->query()->since('-5 days')->until('-2 days')->rows();
+        #/mdx
+
+        $this->assertCount(4, $result);
+
     }
 
     function tearDown(){
