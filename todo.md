@@ -1,2 +1,0 @@
-- query->row() should understand selid() flag
-- create rows() shortcut on table class

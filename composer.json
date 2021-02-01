@@ -15,5 +15,8 @@
     "psr-0" : {
       "FlSouto\\" : "."
     }
-  }
+  },
+	"require": {
+		"ext-json": "*"
+	}
 }

@@ -96,7 +96,7 @@ class FstoreQuery{
         if(!is_object($date) && preg_match("/^\d+$/",$date)){
             return $date;
         } else if(preg_match("/\d{2}\/\d{2}\/\d{4}/",$date)){
-            return implode('-',array_reverse(explode('/',$date)));
+            return strtotime(implode('-',array_reverse(explode('/',$date))));
         } else if($date instanceof \DateTime){
             return $date->getTimestamp();
         } else if(is_string($date)) {
