@@ -113,7 +113,7 @@ class FstoreQuery{
     }
 
     function until($end_date){
-        $this->until = self::date2time($end_date);
+        $this->until = self::date2time($end_date) + 86399;
         return $this;
     }
 
